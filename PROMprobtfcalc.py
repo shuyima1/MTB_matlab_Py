@@ -41,10 +41,16 @@ del data
 
 binarizer = preprocessing.Binarizer()
 ExpBin = binarizer.transform(Exp)
-
-for regpair in TRN:
+probtfgene = [1]*len(TRN)
+for count,regpair in enumerate(TRN):
 	regix = GenIDs.index(regpair[0])
 	tarix = GenIDs.index(regpair[1])
 
 	tfonix = [i for i,x in enumerate(ExpBin[regix]) if x == 1]
 	tfoffix = list(set(range(len(ExpBin[regix]))) - set(tfonix))
+
+	ks = ks_2samp(Exp[tarix][tfonix],Exp[tarix][tfoffix])
+
+	if ks[1] < 0.05:
+		probtfgene[ct] = sum(ExpBin[tarix][tfoffix])/len(tfoffix)
+
