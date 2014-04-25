@@ -54,3 +54,7 @@ for count,regpair in enumerate(TRN):
 	if ks[1] < 0.05:
 		probtfgene[ct] = sum(ExpBin[tarix][tfoffix])/len(tfoffix)
 
+fout = open('PROMprobtfgene.txt','w')
+for item in probtfgene:
+	fout.write('%f\n' %(item))
+fout.close()
