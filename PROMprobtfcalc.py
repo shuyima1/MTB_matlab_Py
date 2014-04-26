@@ -5,9 +5,16 @@ import fileinput
 import sys
 from sklearn import preprocessing
 from scipy.stats import ks_2samp
+from scipy.stats import mstats
 import numpy as np
 import quantile
 
+qflag = 1
+
+thresh = 0.0
+
+if qflag == 1:
+	qthresh = 0.33
 
 data = []
 
@@ -42,19 +49,26 @@ for count,item in enumerate(data[1]):
 
 del data
 Exp = np.array(Exp)
-#binarizer = preprocessing.Binarizer()
-#ExpBin = binarizer.transform(Exp)
 
-#Qexp = quantile.quantilenorm(Exp)
-ExpBin = []
-#for count,row in enumerate(Qexp):
-for count,row in enumerate(Exp):
-	ExpBin.append([])
-	for item in row:
-		if item < 0:
-			ExpBin[count].append(0)
-		else:
-			ExpBin[count].append(1)
+
+if qflag == 1:
+	Exp = quantile.quantilenorm(Exp)
+	thresh = mstats.mquantiles(Exp,qthresh)
+
+#print thresh
+
+binarizer = preprocessing.Binarizer(threshold=thresh)
+ExpBin = binarizer.transform(Exp)
+
+
+# ExpBin = []
+# for count,row in enumerate(Exp):
+# 	ExpBin.append([])
+# 	for item in row:
+# 		if item < thresh:
+# 			ExpBin[count].append(0)
+# 		else:
+# 			ExpBin[count].append(1)
 
 tmp = []
 for count,item in enumerate(ExpBin):
@@ -62,16 +76,16 @@ for count,item in enumerate(ExpBin):
 	blah = list(item)
 	for element in blah:
 		tmp[count].append(str(int(element)))
-print len(tmp)
-print len(tmp[0])
+#print len(tmp)
+#print len(tmp[0])
 
-tmp2 = []
-for item in tmp:
-	tmp2.append('\t'.join(item))
+# tmp2 = []
+# for item in tmp:
+# 	tmp2.append('\t'.join(item))
 
-fout=open('PROMexpbin.txt','w')
-for item in tmp2:
-	fout.write('%s\n' %(item))
+# fout=open('PROMexpbin.txt','w')
+# for item in tmp2:
+# 	fout.write('%s\n' %(item))
 
 ExpBin = np.array(ExpBin)
 
@@ -86,7 +100,6 @@ for count,regpair in enumerate(TRN):
 	tfoffix = list(set(range(len(ExpBin[regix]))) - set(tfonix))
 
 	if len(tfonix) > 0 and len(tfoffix) > 0:
-		#ks = ks_2samp(Qexp[tarix][tfonix],Qexp[tarix][tfoffix])
 		ks = ks_2samp(Exp[tarix][tfonix],Exp[tarix][tfoffix])
 
 		if ks[1] < 0.05:
@@ -95,9 +108,9 @@ for count,regpair in enumerate(TRN):
 			#probtfgene[count] = sum(ExpBin[tarix][tfoffix])/len(tfoffix)
 			probtfgene[count] = numerator[count]/denominator[count]
 
-print probtfgene[0]
+#print probtfgene[0]
 
-fout = open('PROMprobtfgene.txt','w')
+fout = open('PROMprobtfgeneQ.txt','w')
 for p,n,d in zip(probtfgene,numerator,denominator):
 	fout.write('%f\t%f\t%f\n' %(p,n,d))
 fout.close()
