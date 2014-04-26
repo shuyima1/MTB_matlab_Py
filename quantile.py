@@ -13,10 +13,10 @@ def quantilenorm(matrix):
 		sortedmat[:,col] = matrix[matrix[:,col].argsort(),col]
 
 	rowavg = sortedmat.mean(axis=1)
-	qnmat = np.empty(shape=matrix.shape,dtype=int)
+	qnmat = np.empty(shape=matrix.shape,dtype=float)
 	for count,avg in enumerate(rowavg):
 		ix = np.where(rankedmat == count)
-		ix = tuple(zip(*ix)))
+		ix = tuple(zip(*ix))
 		for coord in ix:
 			qnmat[coord[0],coord[1]] = rowavg[count]
 
