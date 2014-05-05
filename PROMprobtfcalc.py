@@ -70,12 +70,12 @@ ExpBin = binarizer.transform(Exp)
 # 		else:
 # 			ExpBin[count].append(1)
 
-tmp = []
-for count,item in enumerate(ExpBin):
-	tmp.append([])
-	blah = list(item)
-	for element in blah:
-		tmp[count].append(str(int(element)))
+# tmp = []
+# for count,item in enumerate(ExpBin):
+# 	tmp.append([])
+# 	blah = list(item)
+# 	for element in blah:
+# 		tmp[count].append(str(int(element)))
 #print len(tmp)
 #print len(tmp[0])
 
@@ -110,7 +110,7 @@ for count,regpair in enumerate(TRN):
 
 #print probtfgene[0]
 
-fout = open('PROMprobtfgeneQ.txt','w')
+fout = open('PROMprobtfgene.txt','w')
 for p,n,d in zip(probtfgene,numerator,denominator):
 	fout.write('%f\t%f\t%f\n' %(p,n,d))
 fout.close()
