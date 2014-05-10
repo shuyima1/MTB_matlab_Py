@@ -16,4 +16,4 @@ rocGriffin = roc(response=c(perfGriffin$Griffin < 0.15),predictor=perfGriffin$PR
 rocSassetti = roc(response=perfSassetti$Sassetti,predictor=perfSassetti$PROM,levels=c('non-essential','essential'),ci=TRUE,plot=TRUE)
 
 roc.test(rocSassetti,rocGriffin)
-roc.test(rocOLD,rocSassetti)'
+roc.test(rocOLD,rocSassetti)
